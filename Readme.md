@@ -22,5 +22,12 @@ Program runs at 56% Validation accuracy and 39% Validation loss
 * keras
 * sklearn
 * numpy
-beautifulsoup4
-requests
+* beautifulsoup4
+* requests
+
+### Uasge:
+Run Buildmodel.py script on commandline.
+
+### Acknowledgements:
+* sentdex tutorial -> https://www.youtube.com/watch?time_continue=535&v=yWkpRdpOiPY
+* Siraj Raval tutorial -> https://www.youtube.com/watch?v=ftMq5ps503w&vl=en
