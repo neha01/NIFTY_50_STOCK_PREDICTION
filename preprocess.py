@@ -1,10 +1,12 @@
 from sklearn import preprocessing
 import pandas as pd
 import numpy as np
+import loadData
 
 
 #how many days data will be used to create series to train RNN
-SERIES_LENGTH=7
+SERIES_LENGTH=30
+PREDICT_LENGTH=7
 
 TICKER="NIFTY_50"
 
@@ -17,38 +19,60 @@ def scale_data(df):
     return df
 
 def process_data(df):
-    df["nifty_future_price"]=df[f"{TICKER}_Close"].shift(-SERIES_LENGTH)
+    df["nifty_future_price"]=df[f"{TICKER}_Close"].shift(-PREDICT_LENGTH)
 
     #Dropping any Nan values
     df.dropna(inplace=True)
 
     #comparing future nifty price with today's price and labeling it as 1 if price increases and zero otherwise
     df["Label"]=np.where(df["nifty_future_price"]>=df["NIFTY_50_Close"],1,0)
-    # print(f"df wth nifty future and label:{df}")
 
-    new_df=pd.DataFrame()
-    new_df["Label"]=df['Label'].copy()
-
-    #dropping 'nifty_future_price' and 'label' columns as they are no longer required
+    #dropping 'nifty_future_price'  columns as it is no longer required
     df.drop('nifty_future_price',1,inplace=True)
-    df.drop('Label',1,inplace=True)
+    df.to_csv('nifty50_future_label.csv')
 
-    df=scale_data(df)
+    sequence=[]
+    temp=df.loc[:, df.columns != 'Label']
+    temp=scale_data(temp)
+    # print(f"temp{temp[:30]}")
+    for i in range (len(temp)-SERIES_LENGTH):
+       sequence.append([np.array(temp[i:i+SERIES_LENGTH]),df.iloc[i+SERIES_LENGTH,-1]])
+
+    np.random.shuffle(sequence)
 
     X=[]
     y=[]
-    sequence=[]
-    for i in range (len(df)-SERIES_LENGTH):
-       sequence.append(np.array(df[i:i+SERIES_LENGTH]))
+    buy=[]
+    sell=[]
+    for seq ,label in sequence:
+        if label == 0:
+            sell.append([seq,label])
+        else:
+            buy.append([seq,label])
+    # print(f"buy :{buy[:10]}")
+    # print(f"sell :{sell[:10]}")
+    buys=len(buy)
+    sells=len(sell)
+    # print(f"original buys:{buys} original sells:{sells}")
+    if(buys<sells):
+        buy=buy[:buys]
+        sell=sell[:buys]
+    else:
+        buy=buy[:sells]
+        sell=sell[:sells]
 
-    final_sequence=[]
-    final_sequence=np.array(sequence)
+    # print(f"buys:{len(buy)} sells:{len(sell)}")
+    sequence=buy+sell
 
-    #shuffling data before feeding it to model
-    np.random.shuffle(final_sequence)
+    np.random.shuffle(sequence)
 
-    X=final_sequence
-    y=np.array(new_df[:-SERIES_LENGTH])
-    print("X=",X)
-    print("y=",y)
-    return X,y
+
+    for seq ,label in sequence:
+        X.append(seq)
+        y.append(label)
+
+
+    return np.array(X),np.array(y)
+
+# df=loadData.load()
+# process_data(df)
