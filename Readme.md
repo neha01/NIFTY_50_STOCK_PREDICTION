@@ -14,7 +14,7 @@ Scale data using sklaern preprocessing libarary
 * Build_model.py</br>
 Build model in keras with LSTM layers.
 
-Program runs at 56% Validation accuracy and 39% Validation loss
+Program runs at 61% Validation accuracy and 39% Validation loss
 
 ### Dependencies:
 * pandas
