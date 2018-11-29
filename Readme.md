@@ -2,6 +2,9 @@
 Predicting NIFTY50 index movement for 7 days period.
 LSTM layers are used in keras to predict NIFTY50 index movement for 7 days period.
 
+## Youtube Tutorial
+https://www.youtube.com/watch?v=BYd9M_ragR0
+
 Project is divided into three parts:</br>
 * loadData.py</br>
 Scraped Wiki's NIFTY50 page to get ticker symbols
