@@ -7,12 +7,12 @@ https://www.youtube.com/watch?v=BYd9M_ragR0
 
 Project is divided into three parts:</br>
 * loadData.py</br>
-Scraped Wiki's NIFTY50 page to get ticker symbols
+Scraped Wiki's NIFTY50 page to get ticker symbols<br>
 Used Quandl API to fetch stock data for past 5 years
 
 * Preprocess.py</br>
-Label training data as 0(sell) and 1(buy)
-Scale data using sklaern preprocessing libarary
+Label training data as 0(sell) and 1(buy)<br>
+Scale data using sklearn preprocessing libarary
 
 * Build_model.py</br>
 Build model in keras with LSTM layers.
@@ -28,7 +28,7 @@ Program runs at 61% Validation accuracy and 39% Validation loss
 * beautifulsoup4
 * requests
 
-### Uasge:
+### Usage:
 Run Buildmodel.py script on commandline.
 
 ### Acknowledgements:
